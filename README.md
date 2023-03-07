@@ -1,1 +1,1 @@
-# code_snippets
+# Set of basic code examples to help manage DNS servers
