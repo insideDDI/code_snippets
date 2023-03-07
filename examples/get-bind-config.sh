@@ -8,16 +8,10 @@ ip addr show > ipaddr.txt
 ip route > iproute.txt
 hostname -A > hostname.txt
 
-tar -zcvf config_dump_`hostname`.tar.gz \
+tar --remove-files -zcvf config_dump_`hostname`.tar.gz \
   config_dump.txt \
   ipaddr.txt \
   iproute.txt \
   ipconfig.json \
   iproute.json \
   hostname.txt
-rm config_dump.txt
-rm ipaddr.txt
-rm iproute.txt
-rm ipconfig.json
-rm iproute.json
-rm hostname.txt
