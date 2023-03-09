@@ -1,4 +1,16 @@
-# Extract MS Server DNS configuration and store into JSON format
+<# Extract MS Server DNS configuration and store into JSON format.
+
+Parameters
+----------
+directory
+    Path for storing all config dumps
+hostname:
+    Hostname of the current server
+
+Returns
+-------
+    JSON and txt files with extraction results
+#>
 
 Set-Variable directory "dns-config-export"
 
@@ -29,12 +41,17 @@ $commandsList = @(
     "Get-NetIPAddress",
     "hostname"
     )
-
+# Commented-out section for future expansion
+# Get-DnsServerResourceRecord | ConvertTo-Json > $( "$directory\" + "DNS-RR.json" )
+# Invoke each command and save output to separate file
 foreach ($c in $commandsList) {
     Invoke-Expression $c | ConvertTo-Json > $( "$directory\$c" + ".json" )
     }
 
-dnscmd /info "$directory\" + "dnscmd.info"
+dnscmd /info > $( "$directory\" + "dnscmd.txt" )
+dnscmd /EnumZones > $( "$directory\" + "enumzones.txt" )
+
+# regedit /e $( "$directory\" + "dns_export.reg" ) "HKEY_LOCAL_Machine\SOFTWARE\Microsoft\Windows\NT\CurrentVersion\DNS Server\Zones"
 
 $zipf = $directory + $( hostname ) + ".zip"
 
@@ -42,5 +59,9 @@ if ( Test-Path $zipf ) {
     rm $zipf
 }
 
+# Archive data in zip
 Compress-Archive -Path $directory -DestinationPath $zipf
-# Get-DnsServerResourceRecord
+
+# Cleanup
+rm -R $directory
+
