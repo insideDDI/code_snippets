@@ -9,11 +9,8 @@
 The attribute can have only the values listed in the table below. 
 
 | Value | Description |
-|-------|-------------|
-{% for k,v in attribute_enum_values.items() %}
-| {{k}} | {{v}}       |
-
-{% endfor %}
+|-------|-------------|{% for k,v in attribute_enum_values.items() %}
+| {{k}} | {{v}}       |{% endfor %}
 {% endif %}
 
 ### Flags: 
@@ -48,4 +45,3 @@ This attribute is used by the following DDI objects:
 This attribute is applicable to all DDI objects.
 
 {% endif %}
-

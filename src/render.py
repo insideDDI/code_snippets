@@ -48,7 +48,7 @@ class Renderer:
     def render_master(self):
         """Render markdown to HTML."""
 
-        directory = 'master'
+        directory = 'extensible_attributes'
 
         _j_env = Environment(
             loader=FileSystemLoader(
@@ -59,7 +59,7 @@ class Renderer:
             'master.md'
         )
 
-        results = template.render(**self.data)
+        results = template.render(data=self.data)
         return results
 
     def render_ea(self):
@@ -85,6 +85,7 @@ class Renderer:
                 attribute_data_type=attr_data['type'],
                 attribute_flags=attr_data['flags'],
                 attribute_ddi_objects=attr_data.get('allowed_objects'),
+                attribute_enum_values=attr_data.get('list_values')
 
             )
 
@@ -107,7 +108,8 @@ class Renderer:
     @staticmethod
     def snake_case_fold(s: str) -> str:
         """Convert string to snake case."""
-        return s.replace(' ', '_').casefold()
+        return (str(s)
+                .replace(' ', '_').casefold())
 
 
 class ExtensibleAttributesExtract:
@@ -187,9 +189,11 @@ class ExtensibleAttributesExtract:
                     for row in range(2, wsea.max_row + 1):
                         value = wsea.cell(row=row, column=1).value
                         if value:
-                            extattrs[extattr]['list_values'].append(value)
-                            if fieldname == 'Region':
-                                output['regions']['choices'].append(value)
+                            extattrs[extattr]['list_values'].append(dict(
+                                value=value, comment=wsea.cell(
+                                    row=row, column=2
+                                ).value
+
                 # process flags
                 # format: CGILMPRSV
                 # V = multiple

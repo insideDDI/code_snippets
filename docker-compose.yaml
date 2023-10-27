@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  documentation:
+    image: ddi-docs:latest
+    container_name: documentation
+    build:
+      context: .
+      dockerfile: ./compose/Dockerfile
+      args:
+        BASE_IMAGE: "ubuntu:latest"
+    volumes:
+      - ./documents:/app/documents
+      - ./config:/app/config
+      # - ./gen.sh:/app/gen.sh
+      - ./output:/app/output:Z
